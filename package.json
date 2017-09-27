@@ -4,7 +4,8 @@
   "description": "GoblinDB | Fear the Goblin! | An amazing, simple and fun database for humans",
   "main": "./goblin.js",
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "demo": "node demo/fear_the_goblin.js"
   },
   "readme": "README.md",
   "repository": {
@@ -40,17 +41,29 @@
     "randomstring": "1.1.5"
   },
   "devDependencies": {
-    "mocha-sinon": "1.1.6",
-    "sinon": "1.17.7",
+    "browserify": "^14.3.0",
+    "browserify-istanbul": "^2.0.0",
+    "bundle-collapser": "^1.2.1",
     "chai": "3.5.0",
     "chai-fs": "1.0.0",
     "gulp": "3.9.1",
+    "gulp-concat": "~2.6.x",
     "gulp-debug": "3.0.0",
     "gulp-eslint": "3.0.1",
+    "gulp-file": "^0.3.0",
+    "gulp-insert": "~0.5.0",
     "gulp-istanbul": "1.1.1",
     "gulp-jsdoc3": "1.0.1",
     "gulp-mocha": "3.0.1",
-    "gulp-util": "3.0.8",
-    "mocha": "3.1.2"
+    "gulp-replace": "^0.5.4",
+    "gulp-size": "~2.1.0",
+    "gulp-streamify": "^1.0.2",
+    "gulp-uglify": "^3.0.0",
+    "gulp-util": "~3.0.x",
+    "merge-stream": "^1.0.1",
+    "mocha": "3.1.2",
+    "mocha-sinon": "1.1.6",
+    "sinon": "1.17.7",
+    "vinyl-source-stream": "^1.1.0"
   }
 }

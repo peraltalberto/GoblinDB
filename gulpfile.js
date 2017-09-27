@@ -6,6 +6,33 @@ var gulp = require('gulp'),
     mocha = require('gulp-mocha'),
     istanbul = require('gulp-istanbul'),
     jsdoc = require('gulp-jsdoc3');
+    var uglify = require('gulp-uglify');
+    var concat = require('gulp-concat');
+  
+    var source = require('vinyl-source-stream');
+
+    var insert = require('gulp-insert');
+    var replace = require('gulp-replace');
+
+    var streamify = require('gulp-streamify');
+
+    var browserify = require('browserify');
+
+    var merge = require('merge-stream');
+    var collapse = require('bundle-collapser/plugin');
+
+    var browserify = require('browserify');
+
+var pack = require('./package.json');
+
+var outDir = './dist/';
+var header = "/*!\n" +
+" * Goblin.js\n" +
+" * http://chartjs.org/\n" +
+" * Version: {{ version }}\n" +
+" *\n" +
+" */\n";
+
 
 gulp.task('jsdoc', function(cb) {
     var config = require('./docs/jsdoc.json');
@@ -45,3 +72,36 @@ gulp.task('lint', function() {
             .pipe(eslint.format())
             .pipe(gulp.dest('.'));
 });
+
+gulp.task('build',function() {
+    
+      var bundled = browserify('./goblin.js', { standalone: 'Goblin' })
+        .plugin(collapse)
+        .bundle()
+        .pipe(source('Goblin.bundle.js'))
+        .pipe(insert.prepend(header))
+        .pipe(streamify(replace('{{ version }}', pack.version)))
+        .pipe(gulp.dest(outDir))
+
+        .pipe(insert.prepend(header))
+        .pipe(streamify(replace('{{ version }}', pack.version)))
+        .pipe(streamify(concat('Goblin.bundle.min.js')))
+        .pipe(gulp.dest(outDir));
+    
+      var nonBundled = browserify('./goblin.js', { standalone: 'Goblin' })
+        .ignore('moment')
+        .plugin(collapse)
+        .bundle()
+        .pipe(source('Goblin.js'))
+        .pipe(insert.prepend(header))
+        .pipe(streamify(replace('{{ version }}', pack.version)))
+        .pipe(gulp.dest(outDir))
+   
+        .pipe(insert.prepend(header))
+        .pipe(streamify(replace('{{ version }}', pack.version)))
+        .pipe(streamify(concat('Goblin.min.js')))
+        .pipe(gulp.dest(outDir));
+    
+      return merge(bundled, nonBundled);
+    
+    });
